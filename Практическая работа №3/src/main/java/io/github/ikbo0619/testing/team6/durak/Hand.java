@@ -3,42 +3,57 @@ package io.github.ikbo0619.testing.team6.durak;
 import java.util.ArrayList;
 
 public class Hand {
-    private ArrayList<Card> cards;
+    private final ArrayList<Card> cards;
 
-    public Hand() {}
+    public Hand() {
+        cards = new ArrayList<>();
+    }
 
-    public Hand(int n) {}
+    public Hand(int n) {
+        cards = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            Card thisCard = new Card();
+            cards.add(thisCard);
+        }
+    }
 
-    public void add(Card c) {}
+    public void add(Card c) {
+        cards.add(c);
+    }
 
-    public void remove(Card c) {}
+    public void remove(Card c) {
+        cards.remove(c);
+    }
 
     public int size() {
-        return 0;
+        return cards.size();
     }
 
     public boolean needsToDraw() {
-        return false;
+        return size() > 6;
     }
 
     public int numberToDraw() {
-        return 0;
+        return needsToDraw() ? 0 : 6 - size();
     }
 
     public ArrayList<Card> getCards() {
-        return null;
+        return cards;
     }
 
     public Card getCardByIndex(int i) {
-        return null;
+        return cards.get(i);
     }
 
     public Card useCardByIndex(int i) {
-        return null;
+        return cards.remove(i);
     }
 
     @Override
     public String toString() {
-        return "";
+        String ret = "";
+        for (Card c : cards)
+            ret += c + "\n";
+        return ret;
     }
 }
