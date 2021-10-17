@@ -1,4 +1,4 @@
-package io.github.ikbo0619.testing.team6.durak.test;
+package io.github.ikbo0619.testing.team6.durak;
 
 import io.github.ikbo0619.testing.team6.durak.Card;
 import io.github.ikbo0619.testing.team6.durak.Durak;
@@ -36,8 +36,8 @@ public class PairTest {
 
     @Test
     public void isCardValidDefender(){
-        Card card1 = new Card("7", "Diamonds");
-        Card card2 = new Card("9", "Hearts");
+        Card card1 = new Card("8", "Diamonds");
+        Card card2 = new Card("7", "Diamonds");
         Card card3 = new Card("9", "Diamonds");
 
         Pair pair = new Pair(card1);
