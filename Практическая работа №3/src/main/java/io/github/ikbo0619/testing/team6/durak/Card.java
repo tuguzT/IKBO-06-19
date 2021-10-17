@@ -93,6 +93,6 @@ public class Card implements Comparable<Card> {
     }
 
     public int getValue() {
-        return 1;
+        return Static.values.get(rank);
     }
 }
