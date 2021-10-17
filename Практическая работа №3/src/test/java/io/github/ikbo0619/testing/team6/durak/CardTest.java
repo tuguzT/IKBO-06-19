@@ -1,17 +1,9 @@
 package io.github.ikbo0619.testing.team6.durak;
 
-import io.github.ikbo0619.testing.team6.durak.Card;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 public class CardTest {
-    public CardTest() {
-
-    }
-
     @Test
     public void createANewCard(){
         Card card = new Card();
@@ -23,9 +15,9 @@ public class CardTest {
     public void createANewCardWithArguments(){
         Card card = new Card("6","Hearts");
 
-        assertEquals("6", card.getRank());
-        assertEquals("Hearts", card.getSuit());
-        assertEquals("Red", card.getColor());
+        Assertions.assertEquals("6", card.getRank());
+        Assertions.assertEquals("Hearts", card.getSuit());
+        Assertions.assertEquals("Red", card.getColor());
     }
 
     @Test
@@ -33,7 +25,7 @@ public class CardTest {
         Card card1 = new Card("7", "Diamonds");
         Card card2 = new Card("9", "Diamonds");
 
-        assertEquals(-2, card1.compareTo(card2));
+        Assertions.assertEquals(-2, card1.compareTo(card2));
     }
 
     @Test
@@ -44,10 +36,10 @@ public class CardTest {
         Card card3 = new Card("7", "Hearts");
         Card card4 = new Card("9", "Hearts");
 
-        assertEquals(-2, card3.trueCompareTo(card4, "Hearts"));
-        assertEquals(1, card1.trueCompareTo(card2, "Diamonds"));
-        assertEquals(-1, card1.trueCompareTo(card2, "Hearts"));
-        assertEquals(-2, card3.trueCompareTo(card4, "Diamonds"));
+        Assertions.assertEquals(-2, card3.trueCompareTo(card4, "Hearts"));
+        Assertions.assertEquals(1, card1.trueCompareTo(card2, "Diamonds"));
+        Assertions.assertEquals(-1, card1.trueCompareTo(card2, "Hearts"));
+        Assertions.assertEquals(-2, card3.trueCompareTo(card4, "Diamonds"));
     }
 
     @Test

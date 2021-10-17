@@ -1,8 +1,5 @@
 package io.github.ikbo0619.testing.team6.durak;
 
-import io.github.ikbo0619.testing.team6.durak.Card;
-import io.github.ikbo0619.testing.team6.durak.Durak;
-import io.github.ikbo0619.testing.team6.durak.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PairTest {
-    public PairTest() {
-    }
-
     @Test
     public void createANewPair(){
         Card card1 = new Card("7", "Diamonds");
