@@ -7,11 +7,11 @@ public class Durak {
         TRUMP = "Hearts";
     }
 
-    public static void setTRUMP(String TRUMP) {
-        Durak.TRUMP = TRUMP;
-    }
-
     public static String getTRUMP() {
         return TRUMP;
+    }
+
+    public static void setTRUMP(String TRUMP) {
+        Durak.TRUMP = TRUMP;
     }
 }

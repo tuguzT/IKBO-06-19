@@ -5,13 +5,12 @@ import io.github.ikbo0619.testing.team6.durak.cardstatic.Static;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Card implements Comparable {
+public class Card implements Comparable<Card> {
 
-    private String rank;
-    private String suit;
-    private String color;
-
-    private Random r = new Random();
+    private static final Random r = new Random();
+    private final String rank;
+    private final String suit;
+    private final String color;
 
     public Card() {
         int randRankIndex = r.nextInt(9);
@@ -28,51 +27,45 @@ public class Card implements Comparable {
             rank = r;
             suit = s;
             color = Static.colors.get(suit);
-        } else {
-            throw new IllegalArgumentException("Invalid rank or suit");
+            return;
         }
+        throw new IllegalArgumentException("Invalid rank or suit");
     }
 
     @Override
     public String toString() {
-        String ret = "<" + rank + ", " + suit + ">";
-        return ret;
+        return "<" + rank + ", " + suit + ">";
     }
 
     @Override
-    public int compareTo(Object o) {
-        Card otherCard = (Card) o;
-
+    public int compareTo(Card otherCard) {
         int thisValue = Static.values.get(rank);
         int otherValue = Static.values.get(otherCard.rank);
 
         return thisValue - otherValue;
     }
 
-    public int trueCompareTo(Object o, String t) {
-        Card otherCard = (Card) o;
-
+    public int trueCompareTo(Card otherCard, String t) {
         boolean thisCardIsTrump = this.isTrump(t);
         boolean otherCardIsTrump = otherCard.isTrump(t);
 
-        int valueDifference = this.compareTo(o);
+        int valueDifference = this.compareTo(otherCard);
 
         if (thisCardIsTrump && otherCardIsTrump) {
             return valueDifference;
-        } else if (thisCardIsTrump && !otherCardIsTrump) {
+        } else if (thisCardIsTrump) {
             return 1;
-        } else if (!thisCardIsTrump && otherCardIsTrump) {
+        } else if (otherCardIsTrump) {
             return -1;
-        } else if (sameSuit(o)) {
+        } else if (sameSuit(otherCard)) {
             return valueDifference;
-        } else {
-            // Different suit; cannot occur based on game rules
-            throw new IllegalArgumentException("Different suit");
         }
+        // Different suit; cannot occur based on game rules
+        throw new IllegalArgumentException("Different suit");
     }
 
-    public int trueCompareTo(Object o) {
-        return trueCompareTo(o, Durak.TRUMP);
+    public int trueCompareTo(Card otherCard) {
+        return trueCompareTo(otherCard, Durak.TRUMP);
     }
 
     public boolean isTrump(String t) {
@@ -83,13 +76,8 @@ public class Card implements Comparable {
         return suit.equals(Durak.TRUMP);
     }
 
-    public boolean sameSuit(Object o) {
-        Card otherCard = (Card) o;
-
-        String thisSuit = this.suit;
-        String otherSuit = otherCard.suit;
-
-        return thisSuit.equals(otherSuit);
+    public boolean sameSuit(Card otherCard) {
+        return this.suit.equals(otherCard.suit);
     }
 
     public String getSuit() {

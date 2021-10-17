@@ -3,7 +3,7 @@ package io.github.ikbo0619.testing.team6.durak;
 import java.util.ArrayList;
 
 public class Pair {
-    private Card attacker;
+    private final Card attacker;
     private Card defender;
 
     private boolean completed;
@@ -26,6 +26,14 @@ public class Pair {
         return defender;
     }
 
+    public void setDefender(Card d) {
+        if (isValidDefender(d)) {
+            defender = d;
+            return;
+        }
+        throw new IllegalArgumentException("Invalid defender");
+    }
+
     public boolean isCompleted() {
         return completed;
     }
@@ -41,20 +49,12 @@ public class Pair {
         return false;
     }
 
-    public void setDefender(Card d) {
-        if (isValidDefender(d)) {
-            defender = d;
-        } else {
-            throw new IllegalArgumentException("Invalid defender");
-        }
-    }
-
     public void toggleCompleted() {
         completed = !completed;
     }
 
     public ArrayList<Card> fetchAllCards() {
-        ArrayList<Card> ret = new ArrayList<Card>();
+        ArrayList<Card> ret = new ArrayList<>();
         if (completed) {
             ret.add(attacker);
             ret.add(defender);
@@ -66,11 +66,11 @@ public class Pair {
 
     @Override
     public String toString() {
-        String ret = new String("{Pair}\n");
+        StringBuilder result = new StringBuilder("{Pair}\n");
         for (Card card : fetchAllCards()) {
-            ret += card + "\n";
+            result.append(card).append("\n");
         }
-        ret += "{Pair}\n";
-        return ret;
+        result.append("{Pair}\n");
+        return result.toString();
     }
 }

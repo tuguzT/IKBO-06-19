@@ -19,7 +19,7 @@ public class Static {
 
     public static final Map<String, Integer> values;
     static {
-        Map<String, Integer> valuesMap = new HashMap<String, Integer>();
+        Map<String, Integer> valuesMap = new HashMap<>();
         valuesMap.put("6", 6);
         valuesMap.put("7", 7);
         valuesMap.put("8", 8);
@@ -41,7 +41,7 @@ public class Static {
 
     public static final Map<String, String> colors;
     static {
-        Map<String, String> colorsMap = new HashMap<String, String>();
+        Map<String, String> colorsMap = new HashMap<>();
         colorsMap.put("Hearts", "Red");
         colorsMap.put("Diamonds", "Red");
         colorsMap.put("Clubs", "Black");

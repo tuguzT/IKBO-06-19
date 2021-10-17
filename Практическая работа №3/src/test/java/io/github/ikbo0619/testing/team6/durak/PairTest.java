@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PairTest {
     @Test
-    public void createANewPair(){
+    public void createANewPair() {
         Card card1 = new Card("7", "Diamonds");
 
         Pair pair = new Pair(card1);
@@ -18,7 +18,7 @@ public class PairTest {
     }
 
     @Test
-    public void checkNewDefender(){
+    public void checkNewDefender() {
         Card card1 = new Card("7", "Diamonds");
         Card card2 = new Card("9", "Hearts");
 
@@ -29,7 +29,7 @@ public class PairTest {
     }
 
     @Test
-    public void isCardValidDefender(){
+    public void isCardValidDefender() {
         Card card1 = new Card("8", "Diamonds");
         Card card2 = new Card("7", "Diamonds");
         Card card3 = new Card("9", "Diamonds");
@@ -43,7 +43,7 @@ public class PairTest {
     }
 
     @Test
-    public void fetchAllCardsIntoArrayList(){
+    public void fetchAllCardsIntoArrayList() {
         Card card1 = new Card("7", "Diamonds");
         Card card2 = new Card("9", "Hearts");
 

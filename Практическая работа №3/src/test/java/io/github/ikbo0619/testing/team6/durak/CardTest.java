@@ -5,15 +5,15 @@ import org.junit.jupiter.api.Test;
 
 public class CardTest {
     @Test
-    public void createANewCard(){
+    public void createANewCard() {
         Card card = new Card();
 
         Assertions.assertNotNull(card.getRank());
     }
 
     @Test
-    public void createANewCardWithArguments(){
-        Card card = new Card("6","Hearts");
+    public void createANewCardWithArguments() {
+        Card card = new Card("6", "Hearts");
 
         Assertions.assertEquals("6", card.getRank());
         Assertions.assertEquals("Hearts", card.getSuit());
@@ -21,7 +21,7 @@ public class CardTest {
     }
 
     @Test
-    public void checkCompare(){
+    public void checkCompare() {
         Card card1 = new Card("7", "Diamonds");
         Card card2 = new Card("9", "Diamonds");
 
@@ -29,7 +29,7 @@ public class CardTest {
     }
 
     @Test
-    public void checkTrueCompare(){
+    public void checkTrueCompare() {
         Card card1 = new Card("7", "Diamonds");
         Card card2 = new Card("9", "Hearts");
 
@@ -43,7 +43,7 @@ public class CardTest {
     }
 
     @Test
-    public void cardIsTrump(){
+    public void cardIsTrump() {
         Card card = new Card("7", "Diamonds");
 
         Assertions.assertFalse(card.isTrump("Hearts"));
@@ -51,7 +51,7 @@ public class CardTest {
     }
 
     @Test
-    public void isOtherCardHasSameSuit(){
+    public void isOtherCardHasSameSuit() {
         Card card1 = new Card("7", "Diamonds");
         Card card2 = new Card("8", "Hearts");
         Card card3 = new Card("9", "Diamonds");
