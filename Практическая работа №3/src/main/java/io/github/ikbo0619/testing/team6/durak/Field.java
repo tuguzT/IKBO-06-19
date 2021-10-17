@@ -13,29 +13,52 @@ public class Field {
         completed = false;
     }
 
-    public Field(Card attackCard) {
+    public Field(Card card) {
         this();
 
-        Pair initialPair = new Pair(attackCard);
+        Pair initialPair = new Pair(card);
         pairs.add(initialPair);
 
-        String initialCardRank = attackCard.getRank();
+        String initialCardRank = card.getRank();
         playedRanks.add(initialCardRank);
     }
 
-    public void attack(Card attackCard) {}
+    public void attack(Card card) {
+        if (canAttack() && isValidAttack(card)) {
+            Pair newAttackPair = new Pair(card);
+            pairs.add(newAttackPair);
+        } else {
+            throw new IllegalArgumentException("You can't attack.");
+        }
+    }
 
-    public void respond(Card defenseCard) {}
+    public void respond(Card card) {
+        if (anyOpenPairs()) {
+            Pair openPair = currentOpenPair();
+            openPair.response(card);
+        }
+    }
 
-    public boolean isValidAttack(Card attackCard) {
+    public boolean isValidAttack(Card card) {
+        String thisRank = card.getRank();
+        for (String rank : playedRanks) {
+            if (thisRank.equals(rank)) {
+                return true;
+            }
+        }
         return false;
     }
 
     public boolean canAttack() {
-        return false;
+        return !anyOpenPairs();
     }
 
     public boolean anyOpenPairs() {
+        for (Pair pair : pairs) {
+            if (!pair.isCompleted()) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -44,7 +67,17 @@ public class Field {
     }
 
     public Pair currentOpenPair() {
-        return null;
+        Pair ret = null;
+        for (Pair pair : pairs) {
+            if (!pair.isCompleted()) {
+                ret = pair;
+            }
+        }
+        if (ret != null) {
+            return ret;
+        } else {
+            throw new IllegalArgumentException("There are no open pairs.");
+        }
     }
 
     public void toggleCompleted() {
@@ -52,7 +85,8 @@ public class Field {
     }
 
     public boolean endField() {
-        return false;
+        toggleCompleted();
+        return anyOpenPairs();
     }
 
     public ArrayList<Card> fetchAllCards() {
@@ -66,6 +100,11 @@ public class Field {
 
     @Override
     public String toString() {
-        return "";
+        StringBuilder result = new StringBuilder("+++ Field +++\n\n");
+        for (Pair pair : pairs) {
+            result.append(pair).append("\n\n");
+        }
+        result.append("+++ Field +++\n\n");
+        return result.toString();
     }
 }
