@@ -19,8 +19,8 @@ public class FieldTest {
         Field field = new Field();
         Assertions.assertTrue(field.fetchAllCards().isEmpty());
 
-        Card defenseCard = new Card();
-        field.respond(defenseCard);
+        Card card = new Card();
+        field.respond(card);
         Assertions.assertTrue(field.fetchAllCards().isEmpty());
     }
 
@@ -31,5 +31,42 @@ public class FieldTest {
 
         field.toggleCompleted();
         Assertions.assertTrue(field.isCompleted());
+    }
+
+    @Test
+    public void responseWithCard() {
+        Card attackCard = new Card("7", "Hearts");
+        Card defenseCard = new Card("7", "Clubs");
+
+        Field field = new Field(attackCard);
+        Assertions.assertDoesNotThrow(() -> field.isValidAttack(attackCard));
+        Assertions.assertDoesNotThrow(() -> field.isValidAttack(defenseCard));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> field.respond(defenseCard));
+    }
+
+    @Test
+    public void attackWithCard() {
+        Card attackCard = new Card("7", "Hearts");
+        Card defenseCard = new Card("7", "Clubs");
+
+        Field field = new Field(attackCard);
+        Assertions.assertDoesNotThrow(() -> field.isValidAttack(attackCard));
+        Assertions.assertDoesNotThrow(() -> field.isValidAttack(defenseCard));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> field.attack(attackCard));
+    }
+
+    @Test
+    public void endField() {
+        Field field = new Field(new Card("9", "Hearts"));
+
+        Assertions.assertDoesNotThrow(() -> field.respond(new Card("10", "Hearts")));
+        Assertions.assertFalse(field.endField());
+        Assertions.assertTrue(field.isCompleted());
+
+        Field newField = new Field(new Card("6", "Diamonds"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> newField.attack(new Card("1", "Hearts")));
+        Assertions.assertDoesNotThrow(() -> newField.respond(new Card("Ace", "Diamonds")));
+        Assertions.assertFalse(newField.endField());
+        Assertions.assertTrue(newField.isCompleted());
     }
 }
