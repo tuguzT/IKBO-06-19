@@ -3,11 +3,18 @@ class Barber(private val barberShop: BarberShop) : () -> Unit {
         private set
     private val barberString = "\n> BARBER\n|"
 
-    override fun invoke() {
-        println("$barberString Парикмахер спит в ожидании клиентов!")
-
+    init {
         try { require(dayPayment == 0) }
         catch (e: Exception) { println("Variable 'dayPayment' must not be equal to zero!") }
+    }
+
+    private fun invariantPayment() {
+        try { require(dayPayment > 0) }
+        catch (e: Exception) { println("Variable 'dayPayment' must be more than zero!") }
+    }
+
+    override fun invoke() {
+        println("$barberString Парикмахер спит в ожидании клиентов!")
 
         while (true) {
             val customer = barberShop.getCustomer()
@@ -37,8 +44,7 @@ class Barber(private val barberShop: BarberShop) : () -> Unit {
                 barberShop.cleanWorkplace()
             }
 
-            try { require(dayPayment > 0) }
-            catch (e: Exception) { println("Variable 'dayPayment' must be more than zero!") }
+            invariantPayment()
         }
     }
 }

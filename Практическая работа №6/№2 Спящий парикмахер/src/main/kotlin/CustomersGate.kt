@@ -1,12 +1,15 @@
 import java.util.*
+import kotlin.concurrent.thread
 
 class CustomersGate(
     private val barberShop: BarberShop,
     private val frequency: Int,
 ) : () -> Unit {
     init {
-        try { require(frequency > 0) }
-        catch (e: Exception) { println("Frequency is less or equal to zero!") }
+        thread(block = { while (true) {
+            try { require(frequency > 0) }
+            catch (e: Exception) { println("Frequency is less or equal to zero!") }
+        }})
     }
 
     private val customersFactory = CustomersFactory()
@@ -14,9 +17,6 @@ class CustomersGate(
 
     override fun invoke() {
         while (true) {
-            try { require(frequency > 0) }
-            catch (e: Exception) { println("Frequency is less or equal to zero!") }
-
             try { Thread.sleep(Random().nextInt(frequency).toLong()) }
             catch (e: InterruptedException) { println("$customersGateString Клиент неожиданно появился...") }
 

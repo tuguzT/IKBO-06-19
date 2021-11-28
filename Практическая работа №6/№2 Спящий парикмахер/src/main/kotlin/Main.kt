@@ -12,7 +12,7 @@ class App : () -> Unit {
         val frequency = input() * 1_000
 
         val barberShop = BarberShop(seatCount)
-        barberShop.invalidateBarberShop()
+        barberShop.invariantBarberShop()
 
         val barber = Barber(barberShop)
         val customersGate = CustomersGate(barberShop, frequency)

@@ -8,7 +8,7 @@ class BarberShop(private val seatCount: Int) {
         thread(block = { while (true) checkQueueSize() })
     }
 
-    fun invalidateBarberShop() {
+    fun invariantBarberShop() {
         try { require(readyToService()) }
         catch (e: Exception) { println("Barber shop is not ready to service by default!") }
 
@@ -31,7 +31,7 @@ class BarberShop(private val seatCount: Int) {
      */
     private fun isCurrentCustomerNull() {
         try { requireNotNull(currentCustomer) }
-        catch (e: Exception) { println("Current customer must not be null!") }
+        catch (e: Exception) { println("Current customer must not be null at that moment!") }
     }
 
     private var currentCustomer: Customer? = null
