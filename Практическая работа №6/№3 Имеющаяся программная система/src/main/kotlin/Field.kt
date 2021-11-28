@@ -1,3 +1,5 @@
+import kotlin.concurrent.thread
+
 class Field(card: Card) {
     private var pairs = ArrayList<Pair>()
     private var playedRanks = ArrayList<Rank>()
@@ -11,25 +13,33 @@ class Field(card: Card) {
 
         val initialCardRank = card.rank
         playedRanks.add(initialCardRank)
+
+        thread(block = { while (true) {
+            try { require(pairs.isNotEmpty()) }
+            catch (e: Exception) { println("List of pairs must not be empty!") }
+
+            try { require(playedRanks.isNotEmpty()) }
+            catch (e: Exception) { println("List of played ranks must not be empty!") }
+        }})
     }
 
-    fun attack(card: Card) {
-        if (!anyOpenPairs() && isValidAttack(card))
+    fun attack(card: Card): Boolean =
+        if (!anyOpenPairs() && isValidAttack(card)) {
             pairs.add(Pair(card))
-        else
-            throw IllegalArgumentException("You can't attack.")
-    }
+            true
+        } else false
 
-    fun respond(card: Card) {
-        if (anyOpenPairs())
-            currentOpenPair().response(card)
-    }
+    fun respond(card: Card): Boolean =
+        try {
+            requireNotNull(currentOpenPair()?.response(card))
+            false
+        } catch (e: Exception) { true }
 
     private fun isValidAttack(card: Card): Boolean {
         val thisRank = card.rank
+
         for (rank in playedRanks)
             if (thisRank == rank) return true
-
         return false
     }
 
@@ -37,18 +47,16 @@ class Field(card: Card) {
         for (pair in pairs)
             if (!pair.completed)
                 return true
-
         return false
     }
 
-    private fun currentOpenPair(): Pair {
+    private fun currentOpenPair(): Pair? {
         var ret: Pair? = null
-
         for (pair in pairs)
             if (!pair.completed)
                 ret = pair
 
-        return ret ?: throw IllegalArgumentException("There are no open pairs.")
+        return ret
     }
 
     fun endField(): Boolean {
@@ -56,16 +64,21 @@ class Field(card: Card) {
         return anyOpenPairs()
     }
 
-    fun fetchAllCards() = ArrayList<Card>().apply {
-        for (pair in pairs)
-            addAll(pair.fetchAllCards())
+    fun fetchAllCards(): ArrayList<Card> {
+        val list = ArrayList<Card>().apply {
+            for (pair in pairs)
+                addAll(pair.fetchAllCards())
+        }
+
+        try { require(list.isNotEmpty()) }
+        catch (e: Exception) { println("Generated list must not be empty!") }
+
+        return list
     }
 
     override fun toString() = buildString {
         append("+++ Field +++\n\n")
-
         for (pair in pairs) append("$pair\n")
-
         append("+++ Field +++\n\n")
     }
 }

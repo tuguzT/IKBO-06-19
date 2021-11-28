@@ -10,23 +10,30 @@ class Pair(card: Card) {
             this.defender = defender
             completed = !completed
         }
-        throw IllegalArgumentException("Invalid defender")
     }
 
     private fun isValidDefender(defender: Card): Boolean {
-        try {
-            if (defender.trueCompareTo(attacker) > 0)
-                return true
-        } catch (e: IllegalArgumentException) {
-            return false
-        }
-        return false
+        return try {
+            require(defender.trueCompareTo(attacker) > 0)
+            true
+        } catch (e: Exception) { false }
     }
 
-    fun fetchAllCards() = ArrayList<Card>().apply {
-        add(attacker)
-        if (completed)
-            add(defender!!)
+    fun fetchAllCards(): ArrayList<Card> {
+        val list = ArrayList<Card>().apply {
+            add(attacker)
+            if (completed) {
+                try { requireNotNull(defender) }
+                catch (e: Exception) { println("Defender must not be null!") }
+
+                add(defender!!)
+            }
+        }
+
+        try { require(list.size <= 2) }
+        catch (e: Exception) { println("List of fetched cards is invalid!") }
+
+        return list
     }
 
     override fun toString() = buildString {

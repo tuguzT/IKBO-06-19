@@ -30,19 +30,9 @@ class Durak : () -> Unit {
             println("The game has ended.")
 
             println("Play again? y/n")
-
-            var validResponse = false
-            while (!validResponse) {
-                when (input(false)) {
-                    "y" -> {
-                        validResponse = true
-                        running = true
-                    }
-                    "n" -> {
-                        validResponse = true
-                        running = false
-                    }
-                }
+            while (true) when (input(false)) {
+                "n" -> { running = false; break }
+                "y" -> break
             }
         }
     }
@@ -66,9 +56,8 @@ class Durak : () -> Unit {
         two = Player(deck, twoName)
 
         println("Determining trump card...")
-        val trumpCard: Card? = deck.draw()
-        val trumpSuit = trumpCard!!.suits
-        TRUMP = trumpSuit
+        val trumpCard = deck.draw()
+        TRUMP = trumpCard!!.suits
 
         println("The trump is: $TRUMP!\n" +
                 "Reinserting trump card...\n")
@@ -87,15 +76,16 @@ class Durak : () -> Unit {
         setPlayer(toAttack = oneToAttack, one)
         setPlayer(toAttack = !oneToAttack, two)
 
+        try { require(one.attacker != two.attacker) }
+        catch (e: Exception) { println("Both players cannot share the same role!") }
+
         println("The initial attacker is: $attacker.\n" +
                 "The initial defender is: $defender.")
-        var gameOver = false
 
-        while (!gameOver) {
+        while (true) {
             val thisRound = round()
 
-            if (victoryAchieved())
-                gameOver = true
+            if (victoryAchieved()) break
             else {
                 attacker.replenish()
                 defender.replenish()
@@ -125,8 +115,7 @@ class Durak : () -> Unit {
         println("$header$roundName has begun!\n" +
                 "${attacker}, initiate the attack!")
 
-        val initialAttack = playerInput(attacker)
-        val initialAttackCard = attacker.useCard(initialAttack)
+        val initialAttackCard = attacker.useCard(playerInput(attacker))
         announceCardPlayed(attacker, initialAttackCard)
 
         if (victoryAchieved())
@@ -197,21 +186,17 @@ class Durak : () -> Unit {
         val isAttacker = player.attacker
 
         turnPrompt(player)
-        var playerSelection = -1
-        var properInput = false
+        while (true) {
+            val playerSelection = input(true).toInt()
 
-        while (!properInput) {
-            playerSelection = input(true).toInt()
-
-            properInput =
+            val properInput =
                 playerSelection <= player.cardsInHand() &&
                 playerSelection >= if (!isAttacker || (isAttacker && roundInitiated))
                     0 else 1
 
-            if (!properInput)
-                print("Invalid input.\nPlease enter an acceptable value: ")
+            if (properInput) return playerSelection
+            else print("Invalid input.\nPlease enter an acceptable value: ")
         }
-        return playerSelection
     }
 
     private fun input(isInt: Boolean): String {
@@ -239,44 +224,44 @@ class Durak : () -> Unit {
         if (input.isNullOrBlank())
             throw IllegalArgumentException("Undefined input...")
 
-        if (isInt && !input.matches(Regex("^([+-]?[1-9]\\d*|0)\$")))
-            throw IllegalArgumentException("Input is not an integer!")
+        val matches = input.matches(Regex("^([+-]?[1-9]\\d*|0)\$"))
 
-        if (!isInt && input.matches(Regex("^([+-]?[1-9]\\d*|0)\$")))
+        if (isInt && !matches)
+            throw IllegalArgumentException("Input is not an integer!")
+        if (!isInt && matches)
             throw IllegalArgumentException("Input must not be an integer!")
     }
 
     private fun response(isAttacker: Boolean, field: Field): Boolean {
         val string = if (isAttacker) "attack" else "defend"
 
-        val properResponse = false
-        while (!properResponse) {
-            try {
-                val player = if (isAttacker) attacker else defender
-                val response = playerInput(player)
+        while (true) {
+            val player = if (isAttacker) attacker else defender
+            val response = playerInput(player)
 
-                return if (response != 0) {
-                    val responseCard = player.getCard(response)
-                    field.apply {
-                        if (isAttacker) attack(responseCard)
-                        else respond(responseCard)
-                    }
-                    player.useCard(response)
-                    announceCardPlayed(player, responseCard)
-                    false
-                } else {
-                    print("\n$player has chosen to end the round!")
-                    if (!isAttacker) {
-                        val takenCards = field.fetchAllCards()
-                        for (card in takenCards)
-                            player.takeCard(card)
-                    }
-                    field.endField()
-                    true
+            if (response != 0) {
+                val responseCard = player.getCard(response)
+                try { require(
+                    if (isAttacker) field.attack(responseCard)
+                    else field.respond(responseCard)
+                )}
+                catch (e: Exception) {
+                    println("\nInvalid $string card!")
+                    continue
                 }
-            } catch (e: IllegalArgumentException) { println("\n\nInvalid $string card!") }
+                player.useCard(response)
+                announceCardPlayed(player, responseCard)
+                return false
+            } else {
+                print("\n$player has chosen to end the round!")
+                if (!isAttacker) {
+                    val takenCards = field.fetchAllCards()
+                    for (card in takenCards) player.takeCard(card)
+                }
+                field.endField()
+                return true
+            }
         }
-        return true
     }
 
     private fun setPlayer(toAttack: Boolean, player: Player) {
