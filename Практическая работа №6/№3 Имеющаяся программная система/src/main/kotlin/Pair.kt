@@ -6,17 +6,10 @@ class Pair(card: Card) {
         private set
 
     fun response(defender: Card) {
-        if (isValidDefender(defender)) {
+        if (defender.trueCompareTo(attacker) > 0) {
             this.defender = defender
             completed = !completed
         }
-    }
-
-    private fun isValidDefender(defender: Card): Boolean {
-        return try {
-            require(defender.trueCompareTo(attacker) > 0)
-            true
-        } catch (e: Exception) { false }
     }
 
     fun fetchAllCards(): ArrayList<Card> {

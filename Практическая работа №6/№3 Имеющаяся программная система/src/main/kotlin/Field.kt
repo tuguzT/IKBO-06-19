@@ -29,11 +29,9 @@ class Field(card: Card) {
             true
         } else false
 
-    fun respond(card: Card): Boolean =
-        try {
-            requireNotNull(currentOpenPair()?.response(card))
-            false
-        } catch (e: Exception) { true }
+    fun respond(card: Card): Boolean {
+        return currentOpenPair()?.response(card) == null
+    }
 
     private fun isValidAttack(card: Card): Boolean {
         val thisRank = card.rank

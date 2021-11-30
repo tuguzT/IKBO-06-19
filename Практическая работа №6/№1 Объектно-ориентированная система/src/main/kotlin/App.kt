@@ -78,9 +78,9 @@ fun main() {
     val variable = Variable("x")
 
     try { require(variable.variable == "x") }
-    catch (e: Exception) {
-        println("Variable is not 'x', but ${variable.variable}!")
-    }
+    catch (e: Exception) { println(
+        "Variable is not 'x', but ${variable.variable}!"
+    ) }
 
     val expression = Add(
         Subtract(

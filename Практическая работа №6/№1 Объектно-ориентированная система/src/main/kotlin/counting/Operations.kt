@@ -121,9 +121,8 @@ class Divide(first: Input, second: Input) : Operation(first, second) {
  * @param operation object to which [answer] was calculated
  * @param answer calculated for an [Operation]
  */
-private fun output(operation: Operation, answer: Double) {
+private fun output(operation: Operation, answer: Double) =
     println("$operation = $answer")
-}
 
 /**
  * Pre-condition for checking input values
